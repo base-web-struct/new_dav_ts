@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Example = () => {
-  return (
-    <div>
-      Example
-    </div>
-  );
-};
-
-Example.propTypes = {
-};
+class Example extends Component<{}, {}> {
+  public render () {
+    return (
+      <div>
+        Example
+      </div>
+    )
+  }
+}
 
 export default Example;
