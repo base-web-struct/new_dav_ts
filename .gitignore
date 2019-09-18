@@ -11,3 +11,5 @@
 npm-debug.log*
 .history
 yarn.lock
+package-lock.json
+yarn-error.log

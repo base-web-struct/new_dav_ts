@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'dva';
-import './IndexPage.scss';
+import React from 'react'
+import { connect } from 'dva'
+import './IndexPage.scss'
 import { Button } from 'antd'
 
 function IndexPage() {
@@ -14,10 +14,7 @@ function IndexPage() {
         <li><a href="https://github.com/dvajs/dva-docs/blob/master/v1/en-us/getting-started.md">Getting Started</a></li>
       </ul>
     </div>
-  );
+  )
 }
 
-IndexPage.propTypes = {
-};
-
-export default connect()(IndexPage);
+export default connect()(IndexPage)
