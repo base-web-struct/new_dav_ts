@@ -1,16 +1,17 @@
-import * as React from 'react';
-import { Router, Route, Switch } from 'dva/router';
-import IndexPage from './routes/IndexPage';
+import * as React from 'react'
+import { Router, Route, Switch } from 'dva/router'
+import { createBrowserHistory } from 'history'
+import IndexPage from './routes/IndexPage'
 
-// tslint:disable-next-line:typedef
-function RouterConfig({ history }) {
+function RouterConfig() {
+  const history = createBrowserHistory()
   return (
     <Router history={history}>
       <Switch>
         <Route path="/" exact component={IndexPage} />
       </Switch>
     </Router>
-  );
+  )
 }
 
-export default RouterConfig;
+export default RouterConfig

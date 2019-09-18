@@ -68,6 +68,7 @@
       "check-whitespace"
     ],
     "ordered-imports": false,
+    "object-literal-sort-keys": false,
     "quotemark": [true, "single", "jsx-double"],
     "radix": true,
     "switch-default": true,

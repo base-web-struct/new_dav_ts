@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import './IndexPage.scss';
-// const styles = require('./IndexPage.sass');
+import { Button } from 'antd'
 
 function IndexPage() {
   return (
     <div className="normal">
+      <Button>11</Button>
       <h1 className="title">Yay! Welcome to dva!</h1>
       <div className="welcome" />
       <ul className="list">

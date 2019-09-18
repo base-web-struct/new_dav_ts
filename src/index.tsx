@@ -1,5 +1,6 @@
 import dva from 'dva';
-import './index.scss';
+import 'antd/es/button/style/index.css'
+import './assets/styles/index.scss';
 
 // 1. Initialize
 const app = dva();
