@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Router, Route, Switch } from 'dva/router';
 import IndexPage from './routes/IndexPage';
 
+// tslint:disable-next-line:typedef
 function RouterConfig({ history }) {
   return (
     <Router history={history}>

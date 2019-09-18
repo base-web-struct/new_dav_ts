@@ -3,14 +3,13 @@
   "scripts": {
     "start": "roadhog server",
     "build": "roadhog build",
-    "lint": "eslint --ext .js src test",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
     "precommit": "npm run lint"
   },
   "dependencies": {
     "dva": "^2.4.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "tslint": "^5.20.0"
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {
     "@types/node-sass": "^4.11.0",
@@ -23,12 +22,19 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
-    "husky": "^0.12.0",
+    "husky": "^3.0.5",
     "node-sass": "^4.12.0",
     "redbox-react": "^1.4.3",
     "roadhog": "^2.5.0-beta.4",
     "sass-loader": "^7.3.1",
     "ts-lint": "^4.5.1",
-    "ts-loader": "^6.1.0"
+    "ts-loader": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
   }
 }

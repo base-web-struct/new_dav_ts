@@ -1,24 +1,27 @@
 
 export default {
 
+  effects: {
+    // tslint:disable-next-line:typedef
+    *fetch({ payload }, { call, put }) {
+      console.log(payload, call)
+      yield put({ type: 'save' });
+    },
+  },
+
   namespace: 'example',
+
+  reducers: {
+    save(state: any, action: any) {
+      return { ...state, ...action.payload };
+    },
+  },
 
   state: {},
 
   subscriptions: {
     setup() {
-    },
-  },
-
-  effects: {
-    *fetch({ payload }, { call, put }) {
-      yield put({ type: 'save' });
-    },
-  },
-
-  reducers: {
-    save(state, action) {
-      return { ...state, ...action.payload };
+      console.log(1)
     },
   },
 
