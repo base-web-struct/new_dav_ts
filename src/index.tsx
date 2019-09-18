@@ -1,6 +1,8 @@
-import dva from 'dva';
+import dva from 'dva'
+import { RouterConfig } from './routes'
+import { globalModel } from './models/global'
 import 'antd/es/button/style/index.css'
-import './assets/styles/index.scss';
+import './assets/styles/index.scss'
 
 // 1. Initialize
 const app = dva();
@@ -9,10 +11,11 @@ const app = dva();
 // app.use({});
 
 // 3. Model
-// app.model(require('./models/example').default);
+// @ts-ignore
+app.model(globalModel)
 
 // 4. Router
-app.router(require('./router').default);
+app.router(RouterConfig);
 
 // 5. Start
 app.start('#root');
