@@ -1,2 +1,7 @@
 {
+  "disableCSSModules": true,
+  "extraBabelPlugins": [
+    "@babel/transform-runtime",
+    [ "import", { "libraryName": "antd", "style": "css" } ]
+  ]
 }
