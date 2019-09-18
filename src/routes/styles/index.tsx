@@ -1,11 +1,12 @@
 import { Component } from 'react'
 import { connect } from 'dva'
-import { Tabs } from 'antd'
+import { Tabs, Icon } from 'antd'
 import { uniqueId } from 'lodash'
 import Sortable from '../../components/Sortable'
 import './index.scss'
 
 interface StyleState {
+  icons: string[],
   storages: string[]
   items: string[]
   rets: string[]
@@ -13,6 +14,7 @@ interface StyleState {
 
 class StylesDesign extends Component<{}, StyleState> {
   public state: StyleState = {
+    icons: ['edit', 'form', 'copy', 'scissor', 'delete', 'snippets'],
     items: ['盒子'],
     rets: [],
     storages: ['资产名称', '资产类型', '申请单号', '申请人']
@@ -59,7 +61,11 @@ class StylesDesign extends Component<{}, StyleState> {
                 tag="ul">
                   {
                     this.state.storages.map(
-                      item => (<li key={uniqueId()} data-id={item}>{item}</li>)
+                      (item: any, ind: number) => (
+                        <li key={uniqueId()} data-id={item}>
+                          <Icon type={this.state.icons[ind]}/>{item}
+                        </li>
+                      )
                     )
                   }
               </Sortable>
