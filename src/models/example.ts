@@ -6,12 +6,12 @@ export default {
   state: {},
 
   subscriptions: {
-    setup() {  // eslint-disable-line
+    setup() {
     },
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {  // eslint-disable-line
+    *fetch({ payload }, { call, put }) {
       yield put({ type: 'save' });
     },
   },

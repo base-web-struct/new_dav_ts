@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-const styles = require('./IndexPage.css');
+const styles = require('./IndexPage.sass');
 
 function IndexPage() {
   return (
