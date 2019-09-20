@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import DragSoruce from './DragSource'
-import DragTarget from './DragTarget'
+import DragTarget from './DragTargetContainer'
 import './DragContainer.less'
 
 class DragContainer extends Component<{}, {}> {

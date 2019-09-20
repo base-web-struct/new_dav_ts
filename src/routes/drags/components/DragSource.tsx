@@ -1,49 +1,40 @@
-import { Component } from 'react'
-import { DragSource as Source } from 'react-dnd'
-import ItemTypes from './ItemTypes'
-import './DragSource.less'
+import { Component } from 'react';
+import { DragSource as Source } from 'react-dnd';
+import ItemTypes from './ItemTypes';
+import './DragSource.less';
 
 interface DragSourceProps {
-    name: string,
-    collector: any,
-    connectDragSource: any
+  name: string;
+  connectDragSource: any;
+  isDragging: boolean;
 }
 
 class DragSource extends Component<DragSourceProps, any> {
-    public static defaultProps = {
-        collector: {}
-    }
+  constructor(props: any) {
+    super(props);
+  }
 
-    constructor (props: any) {
-        super(props)
-    }
-
-    public render() {
-        const { collector, connectDragSource} = this.props
-        const opacity = collector.isDragging ? 0.1 : 1
-        return connectDragSource(
-            <div className="item"
-                style={{ opacity }}>
-                {this.props.name}
-            </div>
-        )
-    }
+  public render() {
+    const { connectDragSource, isDragging } = this.props;
+    const opacity = isDragging ? 0.3 : 1;
+    return connectDragSource(
+      <div className="item" style={{ opacity }}>
+        {this.props.name}
+      </div>
+    );
+  }
 }
 
 const sourceSpec = {
-    beginDrag(props: any) {
-      const item = { name: props.name }
-      return item
-    }
-}
+  beginDrag(props: any) {
+    const item = { name: props.name };
+    return item;
+  }
+};
 
 const collect = (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-})
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+});
 
-export default Source(
-    ItemTypes.SOURCE,
-    sourceSpec,
-    collect
-)(DragSource)
+export default Source(ItemTypes.EXTERNAL, sourceSpec, collect)(DragSource);

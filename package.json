@@ -4,12 +4,14 @@
     "start": "roadhog server",
     "build": "roadhog build",
     "lint": "tslint --project tsconfig.json --config tslint.json 'src/**/ts*'",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "lint-fix": "prettier --write 'src/**/*.{js,jsx,less}'"
   },
   "dependencies": {
     "antd": "^3.23.3",
     "dva": "^2.4.1",
     "gridster": "^0.5.6",
+    "immutability-helper": "^3.0.1",
     "lodash": "^4.17.15",
     "react": "^16.2.0",
     "react-dnd": "^9.3.4",

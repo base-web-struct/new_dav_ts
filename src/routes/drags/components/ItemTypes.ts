@@ -1,3 +1,4 @@
 export default {
-    SOURCE: 'source'
+    EXTERNAL: 'external',
+    INTERNAL: 'internal',
 }
