@@ -76,7 +76,7 @@ class DragTargetContainer extends Component<DragTargetProps, DragTargetState> {
                     this.state.items.map((item: any, index: number) => (
                         <DragItem key={item.id}
                             index={index}
-                            name={item.nameP}
+                            name={item.name}
                             active = {activeIndex === index}
                             onActive={this.active}
                             exchangeItem = {this.exchangeItem}/>
