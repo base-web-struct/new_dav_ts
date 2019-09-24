@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { Button, Form, Input, Select, Upload, Icon } from 'antd'
+import { RcFile } from 'antd/lib/upload'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -26,7 +27,9 @@ interface SelectFormItem {
 interface UploadFormItem {
   label: string,
   action: string,
-  listType?: 'picture-card' | 'picture' | 'text' | undefined
+  listType?: 'picture-card' | 'picture' | 'text' | undefined,
+  fileList: any[],
+  onChange?: (upload: any) => void
 }
 
 interface FormProps {
@@ -42,7 +45,7 @@ class ProcessForm extends Component<FormProps> {
       fileList: [],
       onSubmit: () => ({}),
       onClose: () => ({}),
-      onFileChange: (fileList: any[]) => ([])
+      onFileChange: (fileList: any) => ([]),
     }
 
     constructor (props: FormProps) {
@@ -63,7 +66,12 @@ class ProcessForm extends Component<FormProps> {
     public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
 
     public onFileChange = ({ fileList }) => {
+      console.log(fileList)
       this.props.onFileChange(fileList)
+    }
+
+    public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
+      console.log(file)
     }
 
     public inputFormItem = (config: InputFormItem ) => {
@@ -113,7 +121,7 @@ class ProcessForm extends Component<FormProps> {
     }
 
     public uploadFormItem (config: UploadFormItem) {
-      const { label, action, listType = 'picture-card' } = config
+      const { label, listType = 'picture-card', ...props } = config
       const uploadButton = (
         <div>
           <Icon type="plus" />
@@ -122,10 +130,9 @@ class ProcessForm extends Component<FormProps> {
       return (
         <Form.Item label={ label } wrapperCol={{ span: 16 }} hasFeedback>
           <Upload
-              action={ action }
               listType = { listType }
-              fileList={this.props.fileList}
-              onChange={this.onFileChange}>
+              onChange= { this.onFileChange } 
+              { ...props }>
               {this.props.fileList.length >= 4 ? null : uploadButton}
           </Upload>
         </Form.Item>
@@ -174,7 +181,8 @@ class ProcessForm extends Component<FormProps> {
           {
             this.uploadFormItem({
               label: '流程图标',
-              action: '/'
+              action: '/',
+              fileList: this.props.fileList
             })
           }
           {
