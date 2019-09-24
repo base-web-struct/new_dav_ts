@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Button, Form, Input, Select, Upload, Icon } from 'antd'
-import { RcFile } from 'antd/lib/upload'
+// import { RcFile } from 'antd/lib/upload'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -26,10 +26,11 @@ interface SelectFormItem {
 
 interface UploadFormItem {
   label: string,
-  action: string,
   id: string,
   listType?: 'picture-card' | 'picture' | 'text' | undefined,
   fileList: any[],
+  customRequest: any,
+  onSuccess: any,
   rules?: any,
   onChange?: (upload: any) => void
 }
@@ -42,12 +43,27 @@ interface FormProps {
   onFileChange: (fileList: any[]) => void
 }
 
+function getBase64 (file: any) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 class ProcessForm extends Component<FormProps> {
     public static defaultProps: FormProps = {
       fileList: [],
       onSubmit: () => ({}),
       onClose: () => ({}),
       onFileChange: (fileList: any) => ([]),
+    }
+
+    public state: {
+      fileList: any[]
+    } = {
+      fileList: []
     }
 
     constructor (props: FormProps) {
@@ -68,10 +84,10 @@ class ProcessForm extends Component<FormProps> {
 
     public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
 
-    public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
-      this.props.onFileChange([...this.props.fileList, file])
-      return false
-    }
+    // public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
+    //   this.props.onFileChange([...this.props.fileList, file])
+    //   return true
+    // }
 
     public inputFormItem = (config: InputFormItem ) => {
       const { getFieldDecorator } = this.props.form
@@ -134,7 +150,6 @@ class ProcessForm extends Component<FormProps> {
               <Upload
                   accept="image/*"
                   listType = { listType }
-                  beforeUpload = { this.beforeUpload }
                   { ...props }>
                   {this.props.fileList.length >= 4 ? null : uploadButton}
               </Upload>
@@ -150,6 +165,34 @@ class ProcessForm extends Component<FormProps> {
       } else {
         cb();
       }
+    }
+
+    public async onSuccess(file: any) {
+      console.log(file)
+    }
+
+    public async uploadImage (upload: any) {
+      const { onSuccess, file, fileList = [] } = upload;
+
+      const resp = await new Promise(async reslove => {
+        file.url = await getBase64(file);
+        reslove({
+          status: 0,
+          file,
+        })
+      })
+      onSuccess(resp, file);
+      this.setState({
+        fileList: [
+          ...this.state.fileList,
+          file
+        ]
+      })
+      return {
+        abort() {
+          console.log('upload progress is aborted.');
+        },
+      };
     }
 
     public render () {
@@ -195,8 +238,9 @@ class ProcessForm extends Component<FormProps> {
             this.uploadFormItem({
               id: 'upload',
               label: '流程图标',
-              action: '/',
-              fileList: this.props.fileList,
+              customRequest: this.uploadImage.bind(this),
+              onSuccess: this.onSuccess.bind(this),
+              fileList: this.state.fileList,
               rules: [{
                 validator: this.validatorUpload
               }]
