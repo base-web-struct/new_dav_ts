@@ -26,19 +26,25 @@ interface UploadFormItem {
 interface FormProps {
   form?: any,
   fileList: any[],
-  onSubmit: () => void
-  onClose: () => void
+  onSubmit: () => void,
+  onClose: () => void,
+  onFileChange: (fileList: any[]) => void
 }
 
 class ProcessForm extends Component<FormProps> {
     public static defaultProps: FormProps = {
       fileList: [],
+      onSubmit: () => ({}),
       onClose: () => ({}),
-      onSubmit: () => ({})
+      onFileChange: (fileList: any[]) => ([])
     }
 
     constructor (props: FormProps) {
         super(props);
+    }
+
+    public onFileChange = ({ fileList }) => {
+      this.props.onFileChange(fileList)
     }
 
     public inputFormItem = (config: InputFormItem ) => {
@@ -85,7 +91,8 @@ class ProcessForm extends Component<FormProps> {
           <Upload
               action={ action }
               listType = { listType }
-              fileList={this.props.fileList}>
+              fileList={this.props.fileList}
+              onChange={this.onFileChange}>
               {this.props.fileList.length >= 4 ? null : uploadButton}
           </Upload>
         </Form.Item>

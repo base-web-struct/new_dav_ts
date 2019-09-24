@@ -8,7 +8,8 @@ interface TableListProps {
   title: string,
   isDrawerVisible: boolean,
   fileList: any[],
-  toggleDrawer: () => void
+  toggleDrawer: () => void,
+  setFileList: () => void
 }
 
 class TableList extends Component<TableListProps> {
@@ -17,6 +18,7 @@ class TableList extends Component<TableListProps> {
         isDrawerVisible: false,
         fileList: [],
         toggleDrawer: () => ({}),
+        setFileList: () => ({})
     }
 
     constructor (props: TableListProps) {
@@ -45,6 +47,7 @@ class TableList extends Component<TableListProps> {
                   <div className="body">
                     <ProccessForm
                       fileList={ this.props.fileList }
+                      onFileChange={ this.props.setFileList }
                       onClose={ this.toggleDrawer }
                       onSubmit={ this.submit }/>
                   </div>
@@ -59,8 +62,9 @@ const mapStateToProps = (state: any) => ({
     fileList: state.tables.fileList
 })
 
-const mapDispatchToProps = (dispath: any) => ({
-    toggleDrawer: () => dispath({ type: 'tables/toggleDrawer'})
+const mapDispatchToProps = (dispatch: any) => ({
+    toggleDrawer: () => dispatch({ type: 'tables/toggleDrawer'}),
+    setFileList: (fileList: any[]) => dispatch({ type: 'tables/setFileList', payload: { fileList }})
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableList)

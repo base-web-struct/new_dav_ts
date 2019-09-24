@@ -1,3 +1,4 @@
+import { FileList } from '../bean/constant'
 
 export default {
     effects: {
@@ -11,15 +12,17 @@ export default {
     namespace: 'tables',
   
     reducers: {
-      toggleDrawer (state: any) {
-          console.log(state)
+      toggleDrawer ( state: any ) {
           return { ...state, isDrawerVisible: !state.isDrawerVisible }
+      },
+      setFileList ( state: any, { fileList }: { fileList: any[] }) {
+        return { ...state, fileList}
       }
     },
   
     state: {
         isDrawerVisible: false,
-        fileList: []
+        fileList: FileList
     },
   
     subscriptions: {
