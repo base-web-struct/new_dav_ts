@@ -27,12 +27,12 @@ interface SelectFormItem {
 
 interface UploadFormItem {
   label: string,
-  action: string,
   id: string,
   listType?: 'picture-card' | 'picture' | 'text' | undefined,
   fileList: any[],
   rules?: any,
-  onChange?: (upload: any) => void
+  onChange?: any,
+  beforeUpload?: any
 }
 
 interface FormProps {
@@ -141,7 +141,6 @@ class ProcessForm extends Component<FormProps> {
               <Upload
                   accept="image/*"
                   listType = { listType }
-                  beforeUpload = { this.beforeUpload }
                   { ...props }>
                   {this.props.fileList.length >= 4 ? null : uploadButton}
               </Upload>
@@ -158,6 +157,34 @@ class ProcessForm extends Component<FormProps> {
         cb();
       }
     }
+
+    // public async onSuccess(file: any) {
+    //   console.log(file)
+    // }
+
+    // public async uploadImage (upload: any) {
+    //   const { onSuccess, file, fileList = [] } = upload;
+
+    //   const resp = await new Promise(async reslove => {
+    //     file.url = await file2Base64(file);
+    //     reslove({
+    //       status: 0,
+    //       file,
+    //     })
+    //   })
+    //   onSuccess(resp, file);
+    //   this.setState({
+    //     fileList: [
+    //       ...this.state.fileList,
+    //       file
+    //     ]
+    //   })
+    //   return {
+    //     abort() {
+    //       console.log('upload progress is aborted.');
+    //     },
+    //   };
+    // }
 
     public render () {
       const { getFieldsError } = this.props.form
@@ -202,7 +229,7 @@ class ProcessForm extends Component<FormProps> {
             this.uploadFormItem({
               id: 'upload',
               label: '流程图标',
-              action: '/',
+              beforeUpload: this.beforeUpload,
               fileList: this.props.fileList,
               rules: [{
                 validator: this.validatorUpload
