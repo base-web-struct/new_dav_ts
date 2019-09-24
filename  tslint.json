@@ -30,6 +30,7 @@
         "interface-over-type-literal": true,
         "no-duplicate-imports": false,
         "no-namespace": true,
-        "no-internal-module": true
+        "no-internal-module": true,
+        "no-string-literal": false
     }
 }

@@ -1,6 +1,7 @@
 import { Component } from 'react'
 import { Button, Form, Input, Select, Upload, Icon } from 'antd'
 import { RcFile } from 'antd/lib/upload'
+import { file2Base64 } from '../../../utils'
 
 const { Option } = Select
 const { TextArea } = Input
@@ -69,7 +70,13 @@ class ProcessForm extends Component<FormProps> {
     public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
 
     public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
-      this.props.onFileChange([...this.props.fileList, file])
+      file2Base64(file).then((ret) => {
+        const url = 'url'
+        const status = 'status'
+        file[url] = ret;
+        file[status] = 'done'
+        this.props.onFileChange([...this.props.fileList, file])
+      })
       return false
     }
 

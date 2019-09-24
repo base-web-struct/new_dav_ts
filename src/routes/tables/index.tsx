@@ -64,7 +64,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     toggleDrawer: () => dispatch({ type: 'tables/toggleDrawer'}),
-    setFileList: (fileList: any[]) => dispatch({ type: 'tables/setFileList', payload: { fileList }})
+    setFileList: (fileList: any[]) => dispatch({ type: 'tables/setFileList', fileList })
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableList)

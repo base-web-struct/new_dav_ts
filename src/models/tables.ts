@@ -14,6 +14,7 @@ export default {
           return { ...state, isDrawerVisible: !state.isDrawerVisible }
       },
       setFileList ( state: any, { fileList }: { fileList: any[] }) {
+        console.log(fileList)
         return { ...state, fileList}
       }
     },
