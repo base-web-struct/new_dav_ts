@@ -2,12 +2,18 @@ import { Component } from 'react'
 import { Button, Form, Input, Select, Upload, Icon } from 'antd'
 
 const { Option } = Select
+const { TextArea } = Input
 
 interface InputFormItem {
   label: string,
   id: string,
-  placeholder: string,
+  placeholder?: string,
   rules?: any
+}
+
+interface TextAreaFormItem extends InputFormItem {
+  autosize?: any
+  onPressEnter?: () => void
 }
 
 interface SelectFormItem {
@@ -43,18 +49,46 @@ class ProcessForm extends Component<FormProps> {
         super(props);
     }
 
+    public onClose = () => {
+      this.props.onClose()
+      this.props.form.resetFields()
+    }
+
+    public onSubmit = () => {
+      this.props.form.validateFields((errs, values) => {
+        !errs && console.log(values)
+      })
+    }
+
+    public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
+
     public onFileChange = ({ fileList }) => {
       this.props.onFileChange(fileList)
     }
 
     public inputFormItem = (config: InputFormItem ) => {
       const { getFieldDecorator } = this.props.form
-      const {id, label, placeholder, rules = {}} = config
+      const { id, label, placeholder, rules  } = config
 
       return (
-        <Form.Item label={ label }>
+        <Form.Item label={ label } hasFeedback>
           {
             getFieldDecorator(id, { rules })( <Input placeholder={ placeholder }/> )
+          }
+        </Form.Item>
+      )
+    }
+
+    public textAreaFormItem = (config: TextAreaFormItem ) => {
+      const { getFieldDecorator } = this.props.form
+      const { id, label, rules, placeholder, autosize = { minRows: 6, maxRows: 6 } } = config
+
+      return (
+        <Form.Item label={ label } wrapperCol={{ span: 16 }}>
+          {
+            getFieldDecorator(id, { rules, initialValue: '' })(
+              <TextArea autosize = { autosize } style={{ resize: 'none' }} placeholder={ placeholder }/>
+            )
           }
         </Form.Item>
       )
@@ -83,11 +117,10 @@ class ProcessForm extends Component<FormProps> {
       const uploadButton = (
         <div>
           <Icon type="plus" />
-          <div className="ant-upload-text">Upload</div>
         </div>
       );
       return (
-        <Form.Item label={ label }>
+        <Form.Item label={ label } wrapperCol={{ span: 16 }} hasFeedback>
           <Upload
               action={ action }
               listType = { listType }
@@ -100,8 +133,11 @@ class ProcessForm extends Component<FormProps> {
     }
 
     public render () {
+      const { getFieldsError } = this.props.form
       return (
-        <Form>
+        <Form onSubmit={this.onSubmit}
+          labelCol={{span: 5 }}
+          wrapperCol={{span: 7}}>
           {
             this.inputFormItem({
               label: '流程名称',
@@ -115,7 +151,7 @@ class ProcessForm extends Component<FormProps> {
           }
           {
             this.selectFormItem({
-              label: '应用：',
+              label: '应用',
               id: 'app',
               options: ['应用1', '应用2', '应用3'],
               rules: [{
@@ -126,7 +162,7 @@ class ProcessForm extends Component<FormProps> {
           }
           {
             this.selectFormItem({
-              label: '流程负责人：',
+              label: '流程负责人',
               id: 'director',
               options: ['第一负责人', '第二负责人', '第三负责人'],
               rules: [{
@@ -141,9 +177,20 @@ class ProcessForm extends Component<FormProps> {
               action: '/'
             })
           }
+          {
+            this.textAreaFormItem({
+              label: '备注',
+              id: 'remarks',
+              placeholder: '请输入200字以内',
+            })
+          }
           <div className="footer">
-            <Button className="btn cancel-btn" onClick={this.props.onClose}>取消</Button>
-            <Button className="btn save-btn" onClick={this.props.onSubmit}>保存</Button>
+            <Form.Item>
+              <Button className="btn cancel-btn" onClick={this.onClose}>取消</Button>
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit" className="btn save-btn" disabled={this.hasErrors(getFieldsError())}>保存</Button>
+            </Form.Item>
           </div>
         </Form>
       );
