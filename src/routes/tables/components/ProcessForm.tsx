@@ -44,7 +44,7 @@ class ProcessForm extends Component<FormProps> {
     public inputFormItem = (config: InputFormItem ) => {
       const { getFieldDecorator } = this.props.form
       const {id, label, placeholder, rules = {}} = config
-      console.log(rules)
+
       return (
         <Form.Item label={ label }>
           {
@@ -58,7 +58,7 @@ class ProcessForm extends Component<FormProps> {
       const { getFieldDecorator } = this.props.form
       const { label, id, rules = {}, options = [] } = config
       return (
-        <Form.Item label={ label }>
+        <Form.Item label={ label } hasFeedback>
           {
             getFieldDecorator(id, { rules })(
               <Select>
@@ -87,7 +87,7 @@ class ProcessForm extends Component<FormProps> {
               listType = { listType }
               fileList={this.props.fileList}>
               {this.props.fileList.length >= 4 ? null : uploadButton}
-          </Upload>)
+          </Upload>
         </Form.Item>
       )
     }
@@ -106,15 +106,15 @@ class ProcessForm extends Component<FormProps> {
               }]
             })
           }
-          {/* {
+          {
             this.selectFormItem({
               label: '应用：',
               id: 'app',
               options: ['应用1', '应用2', '应用3'],
-              rules: {
-                require: true,
+              rules: [{
+                required: true,
                 message: '请选择应用'
-              }
+              }]
             })
           }
           {
@@ -122,10 +122,10 @@ class ProcessForm extends Component<FormProps> {
               label: '流程负责人：',
               id: 'director',
               options: ['第一负责人', '第二负责人', '第三负责人'],
-              rules: {
-                require: true,
+              rules: [{
+                required: true,
                 message: '请选择负责人'
-              }
+              }]
             })
           }
           {
@@ -133,7 +133,7 @@ class ProcessForm extends Component<FormProps> {
               label: '流程图标',
               action: '/'
             })
-          } */}
+          }
           <div className="footer">
             <Button className="btn cancel-btn" onClick={this.props.onClose}>取消</Button>
             <Button className="btn save-btn" onClick={this.props.onSubmit}>保存</Button>
