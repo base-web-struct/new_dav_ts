@@ -27,8 +27,10 @@ interface SelectFormItem {
 interface UploadFormItem {
   label: string,
   action: string,
+  id: string,
   listType?: 'picture-card' | 'picture' | 'text' | undefined,
   fileList: any[],
+  rules?: any,
   onChange?: (upload: any) => void
 }
 
@@ -121,7 +123,8 @@ class ProcessForm extends Component<FormProps> {
     }
 
     public uploadFormItem (config: UploadFormItem) {
-      const { label, listType = 'picture-card', ...props } = config
+      const { getFieldDecorator } = this.props.form
+      const { label, id, rules = {}, listType = 'picture-card', ...props } = config
       const uploadButton = (
         <div>
           <Icon type="plus" />
@@ -129,14 +132,27 @@ class ProcessForm extends Component<FormProps> {
       );
       return (
         <Form.Item label={ label } wrapperCol={{ span: 16 }} hasFeedback>
-          <Upload
-              listType = { listType }
-              onChange= { this.onFileChange } 
-              { ...props }>
-              {this.props.fileList.length >= 4 ? null : uploadButton}
-          </Upload>
+          {
+            getFieldDecorator(id, {rules})(
+              <Upload
+                  listType = { listType }
+                  onChange= { this.onFileChange }
+                  { ...props }>
+                  {this.props.fileList.length >= 4 ? null : uploadButton}
+              </Upload>
+            )
+          }
         </Form.Item>
       )
+    }
+
+    public validatorUpload (rule: any, value: any, cb: any) {
+      console.log(rule, value, cb);
+      if (!value.fileList.length) {
+        cb('请上传图片');
+      } else {
+        cb();
+      }
     }
 
     public render () {
@@ -180,9 +196,13 @@ class ProcessForm extends Component<FormProps> {
           }
           {
             this.uploadFormItem({
+              id: 'upload',
               label: '流程图标',
               action: '/',
-              fileList: this.props.fileList
+              fileList: this.props.fileList,
+              rules: [{
+                validator: this.validatorUpload
+              }]
             })
           }
           {
