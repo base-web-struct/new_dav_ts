@@ -32,6 +32,7 @@ interface UploadFormItem {
   fileList: any[],
   rules?: any,
   onChange?: any,
+  onRemove?: any,
   beforeUpload?: any
 }
 
@@ -78,6 +79,11 @@ class ProcessForm extends Component<FormProps> {
         this.props.onFileChange([...this.props.fileList, file])
       })
       return false
+    }
+
+    public removeUpload = (file: RcFile) => {
+      const fileList = [ ...this.props.fileList].filter(f => f.uid !== file.uid)
+      this.props.onFileChange(fileList)
     }
 
     public inputFormItem = (config: InputFormItem ) => {
@@ -152,39 +158,11 @@ class ProcessForm extends Component<FormProps> {
 
     public validatorUpload (rule: any, value: any, cb: any) {
       if (!value || !value.fileList.length) {
-        cb('请上传图片');
+        cb('请上传图标');
       } else {
         cb();
       }
     }
-
-    // public async onSuccess(file: any) {
-    //   console.log(file)
-    // }
-
-    // public async uploadImage (upload: any) {
-    //   const { onSuccess, file, fileList = [] } = upload;
-
-    //   const resp = await new Promise(async reslove => {
-    //     file.url = await file2Base64(file);
-    //     reslove({
-    //       status: 0,
-    //       file,
-    //     })
-    //   })
-    //   onSuccess(resp, file);
-    //   this.setState({
-    //     fileList: [
-    //       ...this.state.fileList,
-    //       file
-    //     ]
-    //   })
-    //   return {
-    //     abort() {
-    //       console.log('upload progress is aborted.');
-    //     },
-    //   };
-    // }
 
     public render () {
       const { getFieldsError } = this.props.form
@@ -231,6 +209,7 @@ class ProcessForm extends Component<FormProps> {
               label: '流程图标',
               beforeUpload: this.beforeUpload,
               fileList: this.props.fileList,
+              onRemove: this.removeUpload,
               rules: [{
                 validator: this.validatorUpload
               }]
@@ -259,6 +238,34 @@ class ProcessForm extends Component<FormProps> {
         </Form>
       );
     }
+  
+    // public async onSuccess(file: any) {
+    //   console.log(file)
+    // }
+
+    // public async uploadImage (upload: any) {
+    //   const { onSuccess, file, fileList = [] } = upload;
+
+    //   const resp = await new Promise(async reslove => {
+    //     file.url = await file2Base64(file);
+    //     reslove({
+    //       status: 0,
+    //       file,
+    //     })
+    //   })
+    //   onSuccess(resp, file);
+    //   this.setState({
+    //     fileList: [
+    //       ...this.state.fileList,
+    //       file
+    //     ]
+    //   })
+    //   return {
+    //     abort() {
+    //       console.log('upload progress is aborted.');
+    //     },
+    //   };
+    // }
 }
 
 export default Form.create({ name: 'processForm' })(ProcessForm)
