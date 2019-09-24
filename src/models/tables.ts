@@ -1,5 +1,3 @@
-import { FileList } from '../bean/constant'
-
 export default {
     effects: {
       // tslint:disable-next-line:typedef
@@ -22,14 +20,13 @@ export default {
   
     state: {
         isDrawerVisible: false,
-        fileList: FileList
+        fileList: []
     },
   
     subscriptions: {
       setup() {
         console.log(1)
       },
-    },
-  
+    }
   };
   

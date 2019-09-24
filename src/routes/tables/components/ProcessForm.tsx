@@ -61,19 +61,16 @@ class ProcessForm extends Component<FormProps> {
 
     public onSubmit = () => {
       this.props.form.validateFields((errs, values) => {
+        console.log(errs)
         !errs && console.log(values)
       })
     }
 
     public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
 
-    public onFileChange = ({ fileList }) => {
-      console.log(fileList)
-      this.props.onFileChange(fileList)
-    }
-
     public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
-      console.log(file)
+      this.props.onFileChange([...this.props.fileList, file])
+      return false
     }
 
     public inputFormItem = (config: InputFormItem ) => {
@@ -131,12 +128,13 @@ class ProcessForm extends Component<FormProps> {
         </div>
       );
       return (
-        <Form.Item label={ label } wrapperCol={{ span: 16 }} hasFeedback>
+        <Form.Item label={ label } wrapperCol={{ span: 16 }}>
           {
             getFieldDecorator(id, {rules})(
               <Upload
+                  accept="image/*"
                   listType = { listType }
-                  onChange= { this.onFileChange }
+                  beforeUpload = { this.beforeUpload }
                   { ...props }>
                   {this.props.fileList.length >= 4 ? null : uploadButton}
               </Upload>
@@ -147,8 +145,7 @@ class ProcessForm extends Component<FormProps> {
     }
 
     public validatorUpload (rule: any, value: any, cb: any) {
-      console.log(rule, value, cb);
-      if (!value.fileList.length) {
+      if (!value || !value.fileList.length) {
         cb('请上传图片');
       } else {
         cb();
@@ -217,7 +214,12 @@ class ProcessForm extends Component<FormProps> {
               <Button className="btn cancel-btn" onClick={this.onClose}>取消</Button>
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit" className="btn save-btn" disabled={this.hasErrors(getFieldsError())}>保存</Button>
+              <Button htmlType="submit"
+                className="btn save-btn"
+                disabled={this.hasErrors(getFieldsError())}
+              >
+                保存
+              </Button>
             </Form.Item>
           </div>
         </Form>
