@@ -31,7 +31,7 @@ interface UploadFormItem {
   listType?: 'picture-card' | 'picture' | 'text' | undefined,
   fileList: any[],
   rules?: any,
-  onChange?: any,
+  onSuccess?: any,
   onRemove?: any,
   beforeUpload?: any
 }
@@ -50,6 +50,12 @@ class ProcessForm extends Component<FormProps> {
       onSubmit: () => ({}),
       onClose: () => ({}),
       onFileChange: (fileList: any) => ([]),
+    }
+
+    public state: {
+      fileList: any[]
+    } = {
+      fileList: []
     }
 
     constructor (props: FormProps) {
@@ -71,19 +77,48 @@ class ProcessForm extends Component<FormProps> {
     public hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field])
 
     public beforeUpload = (file: RcFile, fileList: RcFile[]) => {
-      file2Base64(file).then((ret) => {
-        const url = 'url'
-        const status = 'status'
-        file[url] = ret;
-        file[status] = 'done'
-        this.props.onFileChange([...this.props.fileList, file])
+      // file2Base64(file).then((ret) => {
+      //   const url = 'url'
+      //   const status = 'status'
+      //   file[url] = ret;
+      //   file[status] = 'done'
+      //   this.props.onFileChange([...this.props.fileList, file])
+      // })
+      // return false
+    }
+
+    public onSuccess() {
+      console.log('success');
+    }
+
+    public changeFile(file: RcFile, cb: any) {
+      const { getFieldsError } = this.props.form;
+      console.log(this.props.form.validateFields)
+      this.setState({
+        fileList: [...this.state.fileList, file]
+      });
+      console.log(this.hasErrors(getFieldsError(['upload'])));
+      // cb(this.hasErrors(getFieldsError('upload')));
+      cb(true);
+    }
+
+    public async customRequest (upload: any) {
+      const {onSuccess} = upload;
+      console.log(upload);
+      const file: RcFile = upload.file;
+      const url = await file2Base64(file);
+      file.url = url;
+      file.status = 'done';
+      this.changeFile(file, (status) => {
+        status && onSuccess();
       })
-      return false
     }
 
     public removeUpload = (file: RcFile) => {
-      const fileList = [ ...this.props.fileList].filter(f => f.uid !== file.uid)
-      this.props.onFileChange(fileList)
+      const fileList = [ ...this.state.fileList].filter(f => f.uid !== file.uid)
+      this.setState({
+        fileList
+      })
     }
 
     public inputFormItem = (config: InputFormItem ) => {
@@ -148,7 +183,7 @@ class ProcessForm extends Component<FormProps> {
                   accept="image/*"
                   listType = { listType }
                   { ...props }>
-                  {this.props.fileList.length >= 4 ? null : uploadButton}
+                  {this.state.fileList.length >= 4 ? null : uploadButton}
               </Upload>
             )
           }
@@ -208,7 +243,9 @@ class ProcessForm extends Component<FormProps> {
               id: 'upload',
               label: '流程图标',
               beforeUpload: this.beforeUpload,
-              fileList: this.props.fileList,
+              customRequest: this.customRequest.bind(this),
+              onSuccess: this.onSuccess.bind(this),
+              fileList: this.state.fileList,
               onRemove: this.removeUpload,
               rules: [{
                 validator: this.validatorUpload
@@ -238,7 +275,7 @@ class ProcessForm extends Component<FormProps> {
         </Form>
       );
     }
-  
+
     // public async onSuccess(file: any) {
     //   console.log(file)
     // }
